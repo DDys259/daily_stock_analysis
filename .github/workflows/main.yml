@@ -2,9 +2,8 @@ name: Daily Stock Analysis
 
 on:
   schedule:
-    # 每天 UTC 0 点运行（北京时间早上 8 点）
     - cron: '0 0 * * *'
-  workflow_dispatch:   # 允许手动触发，测试用
+  workflow_dispatch:
 
 jobs:
   run-analysis:
@@ -25,4 +24,16 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: 运行分析脚本
-        run: python main.py   
+        run: python main.py
+
+      - name: 部署到 GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./reports
+          publish_branch: gh-pages
+
+      - name: 微信通知
+        if: always()
+        run: |
+          curl -s "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=每日股票分析&desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

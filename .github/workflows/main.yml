@@ -61,7 +61,10 @@ jobs:
           publish_dir: ./reports
           publish_branch: gh-pages
 
-      - name: 微信通知
+            - name: 微信通知调试
         if: always()
         run: |
-          curl -s "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=每日股票分析&desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "SendKey 长度："
+          echo -n "${{ secrets.SERVERCHAN_KEY }}" | wc -c
+          echo "尝试发送通知（显示详细错误）"
+          curl -v "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=每日股票分析&desp=运行状态：${{ job.status }}"

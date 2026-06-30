@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>每日股票分析报告</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    body { max-width: 900px; margin: 0 auto; padding: 20px; font-family: -apple-system, sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="content"></div>
+  <script>
+    fetch("market_review_20260630.md")
+      .then(r => r.text())
+      .then(t => { document.getElementById("content").innerHTML = marked.parse(t); });
+  </script>
+</body>
+</html>

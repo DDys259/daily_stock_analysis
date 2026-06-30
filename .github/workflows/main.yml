@@ -26,7 +26,6 @@ jobs:
       - name: 运行分析脚本
         run: python main.py
 
-      # 👇 新增的步骤
       - name: 生成报告主页
         run: |
           cd ./reports
@@ -61,7 +60,7 @@ jobs:
           publish_dir: ./reports
           publish_branch: gh-pages
 
-            - name: 微信通知调试
+      - name: 微信通知调试
         if: always()
         run: |
           echo "SendKey 长度："

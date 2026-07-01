@@ -61,12 +61,16 @@ jobs:
           publish_dir: ./reports
           publish_branch: gh-pages
 
-      - name: 微信通知
+      - name: 微信通知（WxPusher）
         if: always()
         env:
-          SENDKEY: ${{ secrets.SERVERCHAN_KEY }}
+          APP_TOKEN: ${{ secrets.WXPUSHER_APP_TOKEN }}
         run: |
-          CLEAN_KEY=$(echo "$SENDKEY" | tr -d '\n\r\t ')
-          curl -v -X POST "https://sctapi.ftqq.com/${CLEAN_KEY}.send" \
-            -d "title=每日股票分析" \
-            -d "desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -X POST "https://wxpusher.zjiecode.com/api/send/message" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "appToken": "'"${APP_TOKEN}"'",
+              "content": "每日股票分析运行完成。\n运行状态：${{ job.status }}\n详情：https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\n报告网站：https://ddys259.github.io/daily_stock_analysis/",
+              "contentType": 1,
+              "uids": []
+            }'

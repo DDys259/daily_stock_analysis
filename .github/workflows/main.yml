@@ -63,5 +63,7 @@ jobs:
 
       - name: 微信通知
         if: always()
+        env:
+          SENDKEY: ${{ secrets.SERVERCHAN_KEY }}
         run: |
-          curl -s "https://sctapi.ftqq.com/${{ secrets.SERVERCHAN_KEY }}.send?title=每日股票分析&desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -v "https://sctapi.ftqq.com/${SENDKEY}.send?title=每日股票分析&desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

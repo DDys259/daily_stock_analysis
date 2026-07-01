@@ -66,4 +66,7 @@ jobs:
         env:
           SENDKEY: ${{ secrets.SERVERCHAN_KEY }}
         run: |
-          curl -v "https://sctapi.ftqq.com/${SENDKEY}.send?title=每日股票分析&desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          CLEAN_KEY=$(echo "$SENDKEY" | tr -d '\n\r\t ')
+          curl -v -X POST "https://sctapi.ftqq.com/${CLEAN_KEY}.send" \
+            -d "title=每日股票分析" \
+            -d "desp=运行状态：${{ job.status }}，详情 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
